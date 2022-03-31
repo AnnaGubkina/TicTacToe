@@ -15,14 +15,16 @@ public class GameController {
 
     public GameDao gameDao;
     public List<Player> players;
-    public static String[][] field;
+    public String[][] field;
     public final static String EMPTY = " - ";
     public final static int SIZE = 3;
+    private static int PEOPLE_RATING;
+
 
     public GameController(GameDao gameDao, List<Player> players) {
         this.gameDao = gameDao;
         this.players = players;
-        field = new String[SIZE][SIZE];
+        this.field = new String[SIZE][SIZE];
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 field[i][j] = EMPTY;
@@ -54,13 +56,25 @@ public class GameController {
         model.addAttribute("field1", field[0][0] + "  " + field[0][1] + "  " + field[0][2]);
         model.addAttribute("field2", field[1][0] + "  " + field[1][1] + "  " + field[1][2]);
         model.addAttribute("field3", field[2][0] + "  " + field[2][1] + "  " + field[2][2]);
+        if (gameDao.whoIsWin(field, symbol)) {
+            if (symbol.equals("X")) {
+                gameDao.players.get(0).setRating(++PEOPLE_RATING);
+            } else {
+                gameDao.players.get(1).setRating(++PEOPLE_RATING);
+            }
+        }
 
         if (gameDao.whoIsWin(field, symbol)) {
-            model.addAttribute("winner", symbol.equals("X") ? "Winner is " + gameDao.players.get(0).getName() : "Winner is " + gameDao.players.get(1).getName());
+            model.addAttribute("winner", symbol.equals("X") ?
+                    "Winner is " + gameDao.players.get(0).getName() + "  rating - " + gameDao.players.get(0).getRating()
+                            + " , " + gameDao.players.get(1).getName() + "  rating - " + gameDao.players.get(1).getRating() :
+                    "Winner is " + gameDao.players.get(1).getName() + " rating - " + gameDao.players.get(1).getRating()
+                            + " , " + gameDao.players.get(0).getName() + " rating - " + gameDao.players.get(0).getRating());
         }
         if (gameDao.isDraw(field)) {
             model.addAttribute("isDraw", "Draw!");
         }
+
         return "gameplay/game";
     }
 
