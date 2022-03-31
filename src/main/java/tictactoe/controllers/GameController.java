@@ -78,6 +78,11 @@ public class GameController {
         return "gameplay/game";
     }
 
+    @PostMapping("/players/game")
+    public String updateField() {
+        gameDao.updateField(field);
+        return "gameplay/game";
+    }
 
     @GetMapping("/players")
     public String showPlayers(Model model) {

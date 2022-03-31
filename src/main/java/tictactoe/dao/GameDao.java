@@ -13,6 +13,7 @@ public class GameDao {
     public final static String EMPTY = " - ";
     public final static String CROSS = "X";
     public final static String ZERO = "0";
+    public final static int SIZE = 3;
 
 
     private static int PEOPLE_COUNT;
@@ -135,6 +136,14 @@ public class GameDao {
                 if (field[row][col] == EMPTY)
                     return false;
         return true;
+    }
+
+    public void updateField(String[][] field) {
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                field[i][j] = EMPTY;
+            }
+        }
     }
 
 
